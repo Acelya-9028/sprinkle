@@ -15,6 +15,8 @@ use std::process::{Command, Stdio};
 use cargo_metadata::{Message, Package};
 use sprinkle::format::{nacp::NacpFile, nxo::NxoFile, romfs::RomFs, pfs0::Pfs0, npdm::NpdmJson, npdm::ACIDBehavior};
 
+use path_slash::PathBufExt;
+
 #[derive(Debug, Serialize, Deserialize, Default)]
 struct NspMetadata {
     npdm: String
@@ -70,7 +72,7 @@ fn main() {
     let rust_target_path = match env::var("RUST_TARGET_PATH") {
         Err(VarError::NotPresent) => metadata.workspace_root.clone(),
         s => PathBuf::from(s.unwrap()),
-    };
+    }.to_slash();
 
     let mut xargo_args: Vec<String> = vec![
         String::from("build"),
@@ -83,7 +85,7 @@ fn main() {
         xargo_args.push(arg);
     }
 
-    let target_path = ensure_target(rust_target_path.to_str().unwrap());
+    let target_path = ensure_target(&rust_target_path.unwrap());
 
     let mut command = Command::new("xargo");
     command.args(&xargo_args).stdout(Stdio::piped()).env("RUST_TARGET_PATH", target_path);

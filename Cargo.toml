@@ -43,6 +43,7 @@ pem = "0.6"
 rand = "0.7"
 rsa = { git = "https://github.com/RustCrypto/RSA", rev = "11500ed" }
 hex = "0.3"
+path-slash = "0.1"
 
 [features]
 default = ["structopt", "cargo_metadata", "semver", "scroll", "goblin", "clap", "cargo-toml2"]
